@@ -33,9 +33,15 @@ function csvHandler(request, response){
     url : request.url
   };
 
-  var stream = fs.createReadStream('.' + obj.url);
+  //var stream = fs.createReadStream('.' + obj.url);
 
-  var userArray = newArray();
+  //var userArray = newArray();
+
+  var fileString;
+
+  fs.readFile('.' + obj[ur], 'utf8', function(err, data){ if(err) throw err; fileString = data;});
+
+  var csvArr = fileString.split('\n');
 
   
 }
