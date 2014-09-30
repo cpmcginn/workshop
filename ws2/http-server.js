@@ -1,5 +1,6 @@
 var http = require('http');
 var url  = require('url');
+var fs = require('fs');
 
 function textHandler(request, response) {
   console.log('received a request from ' + request.headers.host);
@@ -25,13 +26,27 @@ function jsonHandler(request, response) {
   response.end();
 }
 
+function csvHandler(request, response){
+  reponse.writeHead(200, {'Content-Type' : 'text/json'});
+  var obj = {
+    host:request.headers.host,
+    url : request.url
+  };
+
+  var stream = fs.createReadStream('.' + obj.url);
+
+  var userArray = newArray();
+
+  
+}
+
 if (process.argv.length < 3) {
-  console.log('usage: node http-server.js [text|json]');
+  console.log('usage: node http-server.js [text|json|csv]');
   process.exit(1);
 }
 
 var handlerType = process.argv[2];
-if (!(handlerType === 'text' || handlerType === 'json')) {
+if (!(handlerType === 'text' || handlerType === 'json' || handlerType == 'csv')) {
   console.log('usage: node http-server.js [text|json]');
   process.exit(1);  
 }
@@ -44,6 +59,9 @@ switch (handlerType) {
     break;
   case 'json':
     server = http.createServer(jsonHandler);
+    break;
+  case 'csv':
+    server = http.createServer(csvHandler);
     break;
   default:
     throw new Error('invalid handler type!');
