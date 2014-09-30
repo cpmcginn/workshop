@@ -1,6 +1,6 @@
 var http = require('http');
 var url  = require('url');
-var fs = require('fs');
+//var fs = require('fs');
 
 function textHandler(request, response) {
   console.log('received a request from ' + request.headers.host);
@@ -27,37 +27,50 @@ function jsonHandler(request, response) {
 }
 
 function csvHandler(request, response){
-  reponse.writeHead(200, {'Content-Type' : 'text/json'});
-  var obj = {
-    host:request.headers.host,
-    url : request.url
-  };
+  response.writeHead(200, {'Content-Type' : 'text/json'});
+  //var obj = {
+    //host:request.headers.host,
+    //url : request.url
+  //};
 
   //var stream = fs.createReadStream('.' + obj.url);
 
   //var userArray = newArray();
 
-  var fileString;
+  //var fileString;
 
-  fs.readFile('.' + obj[ur], 'utf8', function(err, data){ if(err) throw err; fileString = data;});
+  //console.log(obj[url]);
 
-  var csvArr = fileString.split('\n');
+  var fs = require('fs');
+
+  fs.readFile('user.csv', 'utf8', function(err, data){ 
+
+  if(err) throw err;
+
+  //console.log(fileString);
+
+  var csvArr = data.split('\n');
 
   var userProps = csvArr[0].split(', ');
 
-  var jsonArr = new Array();
+  //var jsonArr = new Array();
 
-  for(var i = 1, i < csvArr.length, i++){
+  for(var i = 1; i < csvArr.length; i++){
     var userData = csvArr[i].split(', ');
     var user = {};
-    for(var j = 0, j < userData.length, j++){
+    for(var j = 0; j < userProps.length; j++){
       user[userProps[j]] = userData[j];
     }
-    jsonArr[jsonArr.length] = JSON.stringify(user);
+    //jsonArr[jsonArr.length] = JSON.stringify(user);
+    console.log(JSON.stringify(user));
+    var json = JSON.stringify(user);
+    response.write(json);
+    response.end();
   }
 
-  response.write(jsonArr);
-  response.end();
+  //response.write(jsonArr);
+  //response.end();
+});
 }
 
 if (process.argv.length < 3) {
@@ -82,6 +95,7 @@ switch (handlerType) {
     break;
   case 'csv':
     server = http.createServer(csvHandler);
+    console.log('Awaiting a request for a csv file!');
     break;
   default:
     throw new Error('invalid handler type!');
