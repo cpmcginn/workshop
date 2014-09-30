@@ -79,7 +79,14 @@ var json_handler = createResponseHandler(function (data) {
 });
 
 var csv_handler = createResponseHandler(function (data) {
-  
+  for(var i = 0, i < data.length, i++){
+    var user = JSON.parse(data[i]);
+    var props = Object.keys(user);
+    for(var j = 0, j < props.length, j ++){
+      conole.log(props[j] + ': ' + user[props[j]]);
+    }
+    console.log('-------------------------');
+  }
 });
 
 console.log(' --> connecting to ' + options.host + ' on port ' + options.port);
