@@ -43,12 +43,21 @@ function csvHandler(request, response){
 
   var csvArr = fileString.split('\n');
 
-  var count = 0;
+  var userProps = csvArr[0].split(', ');
 
-  while(count < csvArr.length){
-    var propArray = csvArr[0].split(', ');
-    
+  var jsonArr = new Array();
+
+  for(var i = 1, i < csvArr.length, i++){
+    var userData = csvArr[i].split(', ');
+    var user = {};
+    for(var j = 0, j < userData.length, j++){
+      user[userProps[j]] = userData[j];
+    }
+    jsonArr[jsonArr.length] = JSON.stringify(user);
   }
+
+  response.write(jsonArr);
+  response.end();
 }
 
 if (process.argv.length < 3) {
