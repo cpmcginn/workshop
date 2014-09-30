@@ -43,7 +43,12 @@ function csvHandler(request, response){
 
   var csvArr = fileString.split('\n');
 
-  
+  var count = 0;
+
+  while(count < csvArr.length){
+    var propArray = csvArr[0].split(', ');
+    
+  }
 }
 
 if (process.argv.length < 3) {
