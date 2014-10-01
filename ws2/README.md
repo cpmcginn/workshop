@@ -14,3 +14,5 @@ a string that emulated the look of a csv line, and then printed it.
 I tried my best to make the implementation work in a way that would be applicable to multiple csv files. That way if some other type of csv,
 some other type of data perhaps and with similar header formatting, was given in the request, then the program could do the exact same with that
 csv. The only issue I ran into was with the readFile function. I tried to grab the url in a similar fashion to the json handler in the server file and then use it as part of the path for readFile. However, everytime I tried, it would not work, so I ended up having to hardcode the path in. That's the one aspect of this that I was not able to universal.
+
+In regards to how to run the code, for the csv to user friendly version you type "node http-server.js csv" to initialize the server and "node http-client.js csv http://localhost:4000/" for the client. Then for the csv to csv version you do the same for the server initialization, and then type "node http-client.js re-csv http://localhost:4000/" for the client.
