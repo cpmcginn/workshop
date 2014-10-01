@@ -66,7 +66,7 @@ if (process.argv.length < 3) {
 }
 
 var handlerType = process.argv[2];
-if (!(handlerType === 'text' || handlerType === 'json' || handlerType == 'csv')) {
+if (!(handlerType === 'text' || handlerType === 'json' || handlerType === 'csv')) {
   console.log('usage: node http-server.js [text|json]');
   process.exit(1);  
 }
