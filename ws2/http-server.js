@@ -28,32 +28,23 @@ function jsonHandler(request, response) {
 
 function csvHandler(request, response){
   response.writeHead(200, {'Content-Type' : 'text/json'});
-  //var obj = {
-    //host:request.headers.host,
-    //url : request.url
-  //};
-
-  //var stream = fs.createReadStream('.' + obj.url);
-
-  //var userArray = newArray();
-
-  //var fileString;
-
-  //console.log(obj[url]);
 
   var fs = require('fs');
+
+  var obj = {
+    host: request.headers.host,
+    url : request.url
+  };
 
   fs.readFile('user.csv', 'utf8', function(err, data){ 
 
   if(err) throw err;
 
-  //console.log(fileString);
-
   var csvArr = data.split('\n');
 
   var userProps = csvArr[0].split(', ');
 
-  //var jsonArr = new Array();
+  var userArr = new Array();
 
   for(var i = 1; i < csvArr.length; i++){
     var userData = csvArr[i].split(', ');
@@ -61,15 +52,11 @@ function csvHandler(request, response){
     for(var j = 0; j < userProps.length; j++){
       user[userProps[j]] = userData[j];
     }
-    //jsonArr[jsonArr.length] = JSON.stringify(user);
-    console.log(JSON.stringify(user));
-    var json = JSON.stringify(user);
-    response.write(json);
-    response.end();
+    userArr.push(user);
   }
-
-  //response.write(jsonArr);
-  //response.end();
+  var json = JSON.stringify(userArr);
+  response.write(json);
+  response.end();
 });
 }
 
