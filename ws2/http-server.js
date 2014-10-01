@@ -1,6 +1,6 @@
 var http = require('http');
 var url  = require('url');
-var fs = require('fs');
+//var fs = require('fs');
 
 function textHandler(request, response) {
   console.log('received a request from ' + request.headers.host);
@@ -27,37 +27,37 @@ function jsonHandler(request, response) {
 }
 
 function csvHandler(request, response){
-  reponse.writeHead(200, {'Content-Type' : 'text/json'});
+  response.writeHead(200, {'Content-Type' : 'text/json'});
+
+  var fs = require('fs');
+
   var obj = {
-    host:request.headers.host,
+    host: request.headers.host,
     url : request.url
   };
 
-  //var stream = fs.createReadStream('.' + obj.url);
+  fs.readFile('user.csv', 'utf8', function(err, data){ 
 
-  //var userArray = newArray();
+  if(err) throw err;
 
-  var fileString;
-
-  fs.readFile('.' + obj[ur], 'utf8', function(err, data){ if(err) throw err; fileString = data;});
-
-  var csvArr = fileString.split('\n');
+  var csvArr = data.split('\n');
 
   var userProps = csvArr[0].split(', ');
 
-  var jsonArr = new Array();
+  var userArr = new Array();
 
-  for(var i = 1, i < csvArr.length, i++){
+  for(var i = 1; i < csvArr.length; i++){
     var userData = csvArr[i].split(', ');
     var user = {};
-    for(var j = 0, j < userData.length, j++){
+    for(var j = 0; j < userProps.length; j++){
       user[userProps[j]] = userData[j];
     }
-    jsonArr[jsonArr.length] = JSON.stringify(user);
+    userArr.push(user);
   }
-
-  response.write(jsonArr);
+  var json = JSON.stringify(userArr);
+  response.write(json);
   response.end();
+});
 }
 
 if (process.argv.length < 3) {
@@ -82,6 +82,7 @@ switch (handlerType) {
     break;
   case 'csv':
     server = http.createServer(csvHandler);
+    console.log('Awaiting a request for a csv file!');
     break;
   default:
     throw new Error('invalid handler type!');
